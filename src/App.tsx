@@ -6,6 +6,9 @@ function App() {
   // 1. Tạo ref riêng cho mỗi card
   const card1Ref = useRef(null);
   const card2Ref = useRef(null);
+  const card3Ref = useRef(null);
+  const card4Ref = useRef(null);
+  const card5Ref = useRef(null);
 
   // 2. Tạo useScroll riêng cho mỗi ref
   const { scrollYProgress: scrollYProgressCard1 } = useScroll({
@@ -18,15 +21,67 @@ function App() {
     offset: ['start end', 'end end']
   });
 
-  const rotate1_raw = useTransform(scrollYProgressCard1, [0, 1], [8, -2.5], {
-    ease: easeInOut
+  const { scrollYProgress: scrollYProgressCard3 } = useScroll({
+    target: card3Ref,
+    offset: ['start end', 'end end']
   });
-  const y1_raw = useTransform(scrollYProgressCard1, [0, 1], [0, -60]);
 
-  const rotate2_raw = useTransform(scrollYProgressCard2, [0, 1], [-6, 1.5], {
+  const { scrollYProgress: scrollYProgressCard4 } = useScroll({
+    target: card4Ref,
+    offset: ['start end', 'end end']
+  });
+
+  const { scrollYProgress: scrollYProgressCard5 } = useScroll({
+    target: card4Ref,
+    offset: ['start end', 'end end']
+  });
+
+  const dimensionTrasform = -100;
+
+  const rotate1_raw = useTransform(scrollYProgressCard1, [0, 1], [8, -2], {
     ease: easeInOut
   });
-  const y2_raw = useTransform(scrollYProgressCard2, [0, 1], [0, -60]);
+  const y1_raw = useTransform(
+    scrollYProgressCard1,
+    [0, 1],
+    [0, dimensionTrasform]
+  );
+
+  const rotate2_raw = useTransform(scrollYProgressCard2, [0, 1], [-6, 1], {
+    ease: easeInOut
+  });
+  const y2_raw = useTransform(
+    scrollYProgressCard2,
+    [0, 1],
+    [0, dimensionTrasform]
+  );
+
+  const rotate3_raw = useTransform(scrollYProgressCard3, [0, 1], [7, -2], {
+    ease: easeInOut
+  });
+  const y3_raw = useTransform(
+    scrollYProgressCard2,
+    [0, 1],
+    [0, dimensionTrasform]
+  );
+
+  const rotate4_raw = useTransform(scrollYProgressCard4, [0, 1], [-2, 0.5], {
+    ease: easeInOut
+  });
+  const y4_raw = useTransform(
+    scrollYProgressCard4,
+    [0, 1],
+    [0, dimensionTrasform]
+  );
+
+  const rotate5_raw = useTransform(scrollYProgressCard5, [0, 1], [-3, 1], {
+    ease: easeInOut
+  });
+  const y5_raw = useTransform(
+    scrollYProgressCard5,
+    [0, 1],
+    [0, dimensionTrasform]
+  );
 
   // -- Áp dụng Spring cho các giá trị --
   const springConfig = { damping: 30, stiffness: 140, duration: 30 };
@@ -35,6 +90,12 @@ function App() {
   const y1 = useSpring(y1_raw, springConfig);
   const rotate2 = useSpring(rotate2_raw, springConfig);
   const y2 = useSpring(y2_raw, springConfig);
+  const rotate3 = useSpring(rotate3_raw, springConfig);
+  const y3 = useSpring(y3_raw, springConfig);
+  const rotate4 = useSpring(rotate4_raw, springConfig);
+  const y4 = useSpring(y4_raw, springConfig);
+  const rotate5 = useSpring(rotate5_raw, springConfig);
+  const y5 = useSpring(y5_raw, springConfig);
 
   return (
     <section className="overflow-hidden">
@@ -52,11 +113,37 @@ function App() {
             transformOrigin: 'top left',
             y: y1 // Áp dụng chuyển động Y
           }}
-          className="bg-white rounded-2xl px-5 py-10 w-[470px] absolute top-16 left-20 shadow-lg"
+          className="bg-white rounded-2xl px-5 py-10 w-[500px] absolute top-16 left-20 shadow-lg"
         >
           <p className="text-3xl leading-8">
             Deck Doctors are the best narrative designers and deck storytellers
             I've ever met.
+          </p>
+          <div className="flex items-center gap-3 mt-5">
+            <div className="rounded-full bg-blue-400 w-12 h-12"></div>
+            <div>
+              <span className="flex flex-col gap-1 text-lg font-medium">
+                Ngo Viet Thanh
+              </span>
+              <span className="text-gray-600 text-lg">
+                Co-Founder, Hustle Fund
+              </span>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          ref={card3Ref}
+          style={{
+            rotate: rotate3, // Sử dụng giá trị từ useTransform
+            transformOrigin: 'top left',
+            y: y3 // Áp dụng chuyển động Y
+          }}
+          className="bg-white rounded-2xl px-8 py-10 w-[440px] absolute top-[570px] left-16 shadow-lg"
+        >
+          <p className="text-3xl leading-8">
+            We struggled for a year to tell our story and Deck Doctors got us
+            there. We closed our round with their help building our narrative.
           </p>
           <div className="flex items-center gap-3 mt-5">
             <div className="rounded-full bg-blue-400 w-12 h-12"></div>
@@ -85,6 +172,59 @@ function App() {
             I've ever met. Deck Doctors are the best narrative designers and
             deck storytellers I've ever met. I've ever met. Deck Doctors are the
             best.
+          </p>
+          <div className="flex items-center gap-3 mt-10">
+            <div className="rounded-full bg-blue-400 w-12 h-12"></div>
+            <div>
+              <span className="flex flex-col gap-1 text-lg font-medium">
+                Ngo Viet Thanh
+              </span>
+              <span className="text-gray-600 text-lg">
+                Co-Founder, Hustle Fund
+              </span>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          ref={card4Ref}
+          style={{
+            rotate: rotate4, // Sử dụng giá trị từ useTransform
+            transformOrigin: 'top right',
+            y: y4
+          }}
+          className="bg-white rounded-2xl px-5 py-10 w-[420px] absolute top-[500px] right-[35%] shadow-lg"
+        >
+          <p className="text-3xl leading-8">
+            We’re close to closing the round now, just about to be at that
+            beautiful oversubscribed mark. The story and deck we workshopped was
+            a big part of that.
+          </p>
+          <div className="flex items-center gap-3 mt-10">
+            <div className="rounded-full bg-blue-400 w-12 h-12"></div>
+            <div>
+              <span className="flex flex-col gap-1 text-lg font-medium">
+                Ngo Viet Thanh
+              </span>
+              <span className="text-gray-600 text-lg">
+                Co-Founder, Hustle Fund
+              </span>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          ref={card5Ref}
+          style={{
+            rotate: rotate5, // Sử dụng giá trị từ useTransform
+            transformOrigin: 'top right',
+            y: y5
+          }}
+          className="bg-white rounded-2xl px-5 py-10 w-[400px] absolute top-[530px] right-[5%] shadow-lg"
+        >
+          <p className="text-3xl leading-8">
+            Bright and insightful... from day one their questions, feedback, and
+            ideas were on point. I feel MUCH better going out to pitch now.
           </p>
           <div className="flex items-center gap-3 mt-10">
             <div className="rounded-full bg-blue-400 w-12 h-12"></div>
