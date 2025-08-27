@@ -2,6 +2,12 @@ import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import { easeInOut } from 'framer-motion';
 import { useRef } from 'react';
 
+type List = {
+  content: string;
+  name: string;
+  role: string;
+};
+
 function App() {
   // 1. Tạo ref riêng cho mỗi card
   const card1Ref = useRef(null);
@@ -97,15 +103,50 @@ function App() {
   const rotate5 = useSpring(rotate5_raw, springConfig);
   const y5 = useSpring(y5_raw, springConfig);
 
-  return (
-    <section className="overflow-hidden">
-      <div className="h-[1000px] bg-blue-200 flex items-center justify-center">
-        <h1 className="text-9xl font-bold text-white px-40 text-center">
-          Cuộn xuống để xem hiệu ứng
-        </h1>
-      </div>
+  const lists: List[] = [
+    {
+      content:
+        " Deck Doctors are the best narrative designers and deck storytellers I've ever met.",
+      name: 'Ngo Viet Thanh1',
+      role: 'Co-Founder, Hustle Fund'
+    },
+    {
+      content:
+        'We struggled for a year to tell our story and Deck Doctors got us there. We closed our round with their help building our narrative.',
+      name: 'Ngo Viet Thanh2',
+      role: 'Co-Founder, Hustle Fund'
+    },
+    {
+      content:
+        "W Deck Doctors are the best narrative designers and deck storytellers I've ever met. Deck Doctors are the best narrative designers and deck storytellers I've ever met. I've ever met. Deck Doctors are the best.",
+      name: 'Ngo Viet Thanh3',
+      role: 'Co-Founder, Hustle Fund'
+    },
+    {
+      content:
+        'We struggled for a year to tell our story and Deck Doctors got us there. We closed our round with their help building our narrative.',
+      name: 'Ngo Viet Thanh4',
+      role: 'Co-Founder, Hustle Fund'
+    },
+    {
+      content:
+        'Bright and insightful... from day one their questions, feedback, and ideas were on point. I feel MUCH better going out to pitch now.',
+      name: 'Ngo Viet Thanh5',
+      role: 'Co-Founder, Hustle Fund'
+    }
+  ];
 
-      <div className="h-[1600px] bg-blue-200 relative">
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end']
+  });
+
+  return (
+    <section className="lg:overflow-hidden">
+      <div className="h-[1200px] bg-blue-200 flex items-center justify-center"></div>
+
+      <div className="hidden lg:block h-[1600px] bg-blue-200 relative">
         <motion.div
           ref={card1Ref}
           style={{
@@ -245,8 +286,77 @@ function App() {
           <div>Rotation 2: {Math.round(rotate2.get())}°</div>
         </div>
       </div>
+
+      <div className="lg:hidden h-[250vh] bg-blue-200" ref={containerRef}>
+        <div className="sticky top-0 flex items-center justify-center">
+          {lists.map((list: List, index: number) => (
+            <Card
+              key={index}
+              content={list.content}
+              name={list.name}
+              role={list.role}
+              i={index}
+              scrollYProgress={scrollYProgress}
+              totalCards={lists.length}
+            />
+          ))}
+        </div>
+      </div>
     </section>
   );
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const Card = ({ content, name, role, i, scrollYProgress, totalCards }: any) => {
+  const step = 1 / totalCards;
+  const start = i * step * 0.5; //  để tạo khoảng cách
+  const end = start + step;
+
+  const y = useTransform(scrollYProgress, [start, end], ['100vh', '30vh']);
+
+  const angle = i % 2 === 0 ? (i == 2 ? -4 : i == 4 ? -2 : 2) : 3;
+
+  const rotate_raw = useTransform(
+    scrollYProgress,
+    [start, end],
+    [-angle, angle] // Xoay từ -5 độ về 0 độ khi dính stack
+  );
+
+  const springConfig = { damping: 20, stiffness: 100 };
+  const rotate = useSpring(rotate_raw, springConfig);
+
+  const zIndex = i; // Card sau nằm trên card trước
+
+  return (
+    <motion.div
+      className={`absolute  ${
+        i === 0
+          ? 'w-[47%]'
+          : i === 2
+          ? 'w-[54%]'
+          : i === 4
+          ? 'w-[50%]'
+          : 'w-[64%]'
+      } h-[30vh] max-h-[500px] bg-white rounded-3xl p-8 shadow-2xl flex flex-col justify-between`}
+      style={{
+        y,
+        rotate,
+        zIndex,
+        top: `calc(-5vh + ${i * 3}px)`
+      }}
+    >
+      <p className="text-lg md:text-xl font-medium leading-relaxed">
+        {content}
+      </p>
+      <div className="flex items-center gap-4 mt-10">
+        <div className="rounded-full bg-blue-500 w-14 h-14"></div>
+        <div>
+          <p className="font-bold text-base">{name}</p>
+          <p className="text-gray-600 text-base">{role}</p>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
 
 export default App;
