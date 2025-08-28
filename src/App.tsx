@@ -38,7 +38,7 @@ function App() {
   });
 
   const { scrollYProgress: scrollYProgressCard5 } = useScroll({
-    target: card4Ref,
+    target: card5Ref,
     offset: ['start end', 'end end']
   });
 
@@ -66,7 +66,7 @@ function App() {
     ease: easeInOut
   });
   const y3Raw = useTransform(
-    scrollYProgressCard2,
+    scrollYProgressCard3,
     [0, 1],
     [0, dimensionTrasform]
   );
