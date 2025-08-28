@@ -6,6 +6,8 @@ type List = {
   content: string;
   name: string;
   role: string;
+  width: string;
+  rotate: number;
 };
 
 function App() {
@@ -108,31 +110,41 @@ function App() {
       content:
         " Deck Doctors are the best narrative designers and deck storytellers I've ever met.",
       name: 'Ngo Viet Thanh1',
-      role: 'Co-Founder, Hustle Fund'
+      role: 'Co-Founder, Hustle Fund',
+      width: 'w-[54%]',
+      rotate: 3
     },
     {
       content:
         'We struggled for a year to tell our story and Deck Doctors got us there. We closed our round with their help building our narrative.',
       name: 'Ngo Viet Thanh2',
-      role: 'Co-Founder, Hustle Fund'
+      role: 'Co-Founder, Hustle Fund',
+      width: 'w-[52%]',
+      rotate: 1
     },
     {
       content:
-        "W Deck Doctors are the best narrative designers and deck storytellers I've ever met. Deck Doctors are the best narrative designers and deck storytellers I've ever met. I've ever met. Deck Doctors are the best.",
+        "W Deck Doctors are the best narrative designers and deck storytellers I've ever met. Deck Doctors are the best narrative.",
       name: 'Ngo Viet Thanh3',
-      role: 'Co-Founder, Hustle Fund'
+      role: 'Co-Founder, Hustle Fund',
+      width: 'w-[60%]',
+      rotate: -3
     },
     {
       content:
-        'We struggled for a year to tell our story and Deck Doctors got us there. We closed our round with their help building our narrative.',
+        "We struggled for a year to tell our story and Deck Doctors got us there. We closed our round with their help building our narrative.  designers and deck storytellers I've ever met. I've ever met. Deck Doctors are the best",
       name: 'Ngo Viet Thanh4',
-      role: 'Co-Founder, Hustle Fund'
+      role: 'Co-Founder, Hustle Fund',
+      width: 'w-[50%]',
+      rotate: 4
     },
     {
       content:
         'Bright and insightful... from day one their questions, feedback, and ideas were on point. I feel MUCH better going out to pitch now.',
       name: 'Ngo Viet Thanh5',
-      role: 'Co-Founder, Hustle Fund'
+      role: 'Co-Founder, Hustle Fund',
+      width: 'w-[46%]',
+      rotate: -2
     }
   ];
 
@@ -144,7 +156,9 @@ function App() {
 
   return (
     <section className="lg:overflow-hidden">
-      <div className="h-[1200px] bg-blue-200 flex items-center justify-center"></div>
+      <div className="h-[1200px] bg-blue-400 flex items-center justify-center">
+        header
+      </div>
 
       <div className="hidden lg:block h-[1600px] bg-blue-200 relative">
         <motion.div
@@ -281,8 +295,8 @@ function App() {
         </motion.div>
       </div>
 
-      <div className="lg:hidden h-[250vh] bg-blue-200" ref={containerRef}>
-        <div className="sticky top-0 flex items-center justify-center">
+      <div className="lg:hidden h-[200vh] relative" ref={containerRef}>
+        <div className="sticky h-screen bg-blue-300 overflow-hidden top-0 flex items-center justify-center">
           {lists.map((list: List, index: number) => (
             <Card
               key={index}
@@ -292,51 +306,53 @@ function App() {
               i={index}
               scrollYProgress={scrollYProgress}
               totalCards={lists.length}
+              width={list.width}
+              rotateCard={list.rotate}
             />
           ))}
         </div>
+      </div>
+      <div className="h-[700px] bg-green-300 flex items-center justify-center">
+        footer
       </div>
     </section>
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const Card = ({ content, name, role, i, scrollYProgress, totalCards }: any) => {
+const Card = ({
+  content,
+  name,
+  role,
+  i,
+  scrollYProgress,
+  totalCards,
+  width,
+  rotateCard
+}: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+any) => {
   const step = 1 / totalCards;
-  const start = i * step * 0.4; //  để tạo khoảng cách
+  const start = i * step * 0.3; //  để tạo khoảng cách
   const end = start + step;
 
-  const y = useTransform(scrollYProgress, [start, end], ['100vh', '30vh']);
-
-  const angle = i % 2 === 0 ? (i == 2 ? -4 : i == 4 ? -2 : 2) : 3;
+  const y = useTransform(scrollYProgress, [start, end], ['105vh', '20vh']);
 
   const rotate_raw = useTransform(
     scrollYProgress,
     [start, end],
-    [-angle, angle]
+    [-rotateCard, rotateCard]
   );
 
   const springConfig = { damping: 50, stiffness: 40 };
   const rotate = useSpring(rotate_raw, springConfig);
 
-  const zIndex = i;
-
   return (
     <motion.div
-      className={`absolute  ${
-        i === 0
-          ? 'w-[47%]'
-          : i === 2
-          ? 'w-[54%]'
-          : i === 4
-          ? 'w-[40%]'
-          : 'w-[57%]'
-      } bg-white rounded-3xl p-4 md:p-8 shadow-2xl flex flex-col justify-between`}
+      className={`absolute ${width} bg-white rounded-3xl p-4 md:p-8 shadow-2xl flex flex-col justify-between`}
       style={{
         y,
         rotate,
-        zIndex,
-        top: `calc(-5vh + ${i * 3}px)`
+        zIndex: i,
+        top: `calc(-5vh + ${i * 5}px)`
       }}
     >
       <p className="text-lg md:text-xl font-medium leading-relaxed">
